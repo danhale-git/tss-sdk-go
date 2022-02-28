@@ -20,13 +20,13 @@ const (
 // UserCredential holds the username and password that the API should use to
 // authenticate to the REST API
 type UserCredential struct {
-	Username, Password string
+	Domain, Username, Password string
 }
 
 // Configuration settings for the API
 type Configuration struct {
-	Credentials                                              UserCredential
-	ServerURL, TLD, Tenant, apiPathURI, tokenPathURI, Domain string
+	Credentials                                      UserCredential
+	ServerURL, TLD, Tenant, apiPathURI, tokenPathURI string
 }
 
 // Server provides access to secrets stored in Thycotic Secret Server
@@ -134,8 +134,8 @@ func (s Server) getAccessToken() (string, error) {
 		"grant_type": {"password"},
 	}
 
-	if s.Domain != "" {
-		params["domain"] = []string{s.Domain}
+	if s.Credentials.Domain != "" {
+		params["domain"] = []string{s.Credentials.Domain}
 	}
 
 	body := strings.NewReader(params.Encode())
